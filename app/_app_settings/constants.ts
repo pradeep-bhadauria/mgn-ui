@@ -1,5 +1,5 @@
 export class AppSettings {
-   public static API_ENDPOINT='http://services.medicalglobalnet.com';
+   public static API_ENDPOINT='https://mgn-services.herokuapp.com';
    //public static API_ENDPOINT='http://localhost:5000';
    
    public static AUTH_TYPES = {
