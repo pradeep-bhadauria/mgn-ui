@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="col-sm-3 hidden-xs">
+        <div class="list-group">
+            <a [routerLink]="['/settings/profile']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'profile' }">
+                <i class="fa fa-user-o"></i> Profile Details
+            </a>
+            <a [routerLink]="['/settings/email']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'email' }">
+                <i class="fa fa-envelope-o"></i> Email
+            </a>
+            <a [routerLink]="['/settings/username']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'username' }">
+                <i class="fa fa-user-secret"></i> Username
+            </a>
+            <a [routerLink]="['/settings/password']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'password' }">
+                <i class="fa fa-key"></i> Password
+            </a>
+            <a [routerLink]="['/settings/language']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'language' }">
+                <i class="fa fa-language"></i> Language
+            </a>
+            <a [routerLink]="['/settings/timezone']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'timezone' }">
+                <i class="fa fa-clock-o"></i> Timezone
+            </a>
+            <a [routerLink]="['/settings/currency']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'currency' }">
+                <i class="fa fa-money"></i> Currency
+            </a>
+            <a [routerLink]="['/settings/account']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'account' }">
+                <i class="fa fa-gear"></i> Account
+            </a>
+        </div>
+    </div>
+    <div class="sm-side-menu col-sm-9 visible-xs-block">
+        <div class="btn-group">
+            <a type="button" class="btn btn-primary" [routerLink]="['/settings/profile']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'profile' }">
+                <i class="fa fa-user-o"></i>
+            </a>
+            <a type="button" class="btn btn-primary"  [routerLink]="['/settings/email']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'email' }">
+                <i class="fa fa-envelope-o"></i>
+            </a>
+            <a type="button" class="btn btn-primary"  [routerLink]="['/settings/username']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'username' }">
+                <i class="fa fa-user-secret"></i>
+            </a>
+            <a type="button" class="btn btn-primary"  [routerLink]="['/settings/password']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'password' }">
+                <i class="fa fa-key"></i>
+            </a>
+            <a type="button" class="btn btn-primary"  [routerLink]="['/settings/language']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'language' }">
+                <i class="fa fa-language"></i>
+            </a>
+            <a type="button" class="btn btn-primary"  [routerLink]="['/settings/timezone']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'timezone' }">
+                <i class="fa fa-clock-o"></i>
+            </a>
+            <a type="button" class="btn btn-primary"  [routerLink]="['/settings/currency']"
+            [ngClass]="{ 'list-group-item': menuType, 'active': menuType === 'currency' }">
+                <i class="fa fa-money"></i>
+            </a>
+        </div>
+    </div>
+    <div class="col-sm-9">   
+        <template #settingForm></template>
+    </div>
+    <div *ngIf="loading">Loading...</div>
+</div>

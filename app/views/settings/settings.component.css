@@ -1,0 +1,59 @@
+.list-group-item{
+    font-size: 12px;
+}
+.list-group-item i{
+    font-size: 14px;
+}
+.list-group-item .badge {
+    font-size: 10px;
+}
+.fill {
+    float: left;
+    padding: 0px;
+    width: 180px;
+    height: 180px;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 0px 10px 10px 0px;
+}
+.fill img {
+    width: 100%;
+    height: 100%;
+}
+.fill .details {
+    position: relative;
+    top: -85px;
+    background: rgba(255,255,255,0.4);
+    width: 100%;
+    height: 85px;
+    padding-top: 1px;
+}
+.details h4{
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.details .message{
+    background: #2196F3;
+    height: 35px;
+    width: 35px;
+    border-radius: 100%;
+    padding-top: 7px;
+    color: #fff;
+    padding-left: 10px;
+    float: right;
+}
+.details .remove{
+    background: #FF5722;
+    height: 35px;
+    width: 35px;
+    border-radius: 100%;
+    padding-top: 7px;
+    color: #fff;
+    padding-left: 11px;
+}
+.sm-side-menu {
+    margin: -5px 0px 15px 0px !important;
+}

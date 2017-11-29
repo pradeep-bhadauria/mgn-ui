@@ -1,0 +1,140 @@
+<div class="chat_container" (window:resize)="onResize()">
+    <div class="col-sm-3 chat_sidebar" [style.display]="getChatSidebarDisplay()">
+        <div class="row">
+            <div id="custom-search-input">
+                <div class="input-group col-md-12">
+                    <input type="text" class="  search-query form-control" placeholder="Conversation" />
+                    <button class="btn btn-danger" type="button">
+                        <span class=" glyphicon glyphicon-search"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="dropdown all_conversation">
+                <button class="dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-weixin" aria-hidden="true"></i>
+                    {{thread_type}}
+                    <span class="caret pull-right"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                    <li><a [routerLink]="['/messages']" fragment='Inbox'>Inbox</a></li>
+                    <li><a [routerLink]="['/messages']" fragment='Unread'>Unread</a></li>
+                    <li><a [routerLink]="['/messages']" fragment='Archived'>Archived</a></li>
+                    <li><a [routerLink]="['/messages']" fragment='Spam'>Spam</a></li>
+                </ul>
+            </div>
+            <div class="member_list" [style.height]="height_member_list + 'px'">
+                <ul class="list-unstyled">
+                    <span *ngIf="loading">Loading...</span>
+                    <li class="left clearfix" (click)="showMessages()" *ngFor="let thread of threads; let isFirst = first" [class.active]="isFirst">
+                        <div id="{{thread.message_thread.id}}" (click)="getMessages(thread.message_thread.id,0)">
+                            <span class="chat-img pull-left">
+                                <span *ngIf="thread.participants.length > 1">
+                                    <img src="/img/group.png" alt="Group" class="img-circle">
+                                </span>
+                                <span *ngIf="thread.participants.length == 1">
+                                    <img *ngIf="thread.participants[0].profile_pic != null" src="{{thread.participants[0].profile_pic}}" alt="{{thread.participants[0].first_name}}" class="img-circle">
+                                    <img *ngIf="thread.participants[0].profile_pic == null" src="/img/user.png" alt="{{thread.participants[0].first_name}}" class="img-circle">
+                                </span>
+                            </span>
+                            <div class="chat-body clearfix">
+                                <div class="header_sec">
+                                    <strong class="primary-font">
+                                        <span *ngIf="thread.participants.length > 1">Group Conversation</span>
+                                        <span *ngIf="thread.participants.length == 1">{{thread.participants[0].first_name}}</span>
+                                    </strong> 
+                                    <span class="pull-right">
+                                        {{getTime(thread.message_thread.last_user_message.created)}}
+                                    </span>
+                                </div>
+                                <div class="contact_sec">
+                                    <div class="thread-last-msg">
+                                        <span>{{thread.message_thread.last_user_message.message_text}}</span>
+                                    </div> 
+                                    <span *ngIf="thread.unread_message_count > 0" class="badge pull-right">
+                                        {{thread.unread_message_count}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div><!--chat_sidebar-->
+
+    <div class="col-sm-9 message_section" [style.display]="getMessageSectionDisplay()">
+        <div class="row">
+            <div class="new_message_head">
+                <div class="pull-left">
+                    <button (click)="mobileBack()" title="Back" *ngIf="isMobile">
+                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                    </button>
+                    <a [routerLink]="['/new-message']">
+                        <button title="New Message">
+                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                    <span>
+
+                    </span>
+                </div>
+                <div class="pull-right">
+                    <div class="dropdown">
+                        <button title="Settings" class="dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul *ngIf="thread_id" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                            <li (click)="leaveThread()"><a>Leave Group</a></li>
+                            <li *ngIf="thread_type != 'Archived'" (click)="archiveThread()"><a>Archieve</a></li>
+                            <li *ngIf="thread_type == 'Archived'" (click)="unarchiveThread()"><a>Unarchieve</a></li>
+                            <li *ngIf="thread_type != 'Spam'" (click)="spamThread(1)"><a>Mark Spam</a></li>
+                            <li *ngIf="thread_type == 'Spam'" (click)="spamThread(0)"><a>Not Spam</a></li>
+                            <li (click)="deleteThread()"><a>Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div><!--new_message_head-->
+            <div #messagesWindow class="chat_area" [style.height]="height_chat_area + 'px'" >
+                <span *ngIf="loading_messages">Loading...</span>
+                <div *ngIf="messages" class="chat_area_ul list-unstyled">
+                    <div *ngFor="let message of messages.slice().reverse()">
+                        <div *ngIf="message.message.sent_from_master_user.id != currentUser.id" class="chat_area_li left clearfix">
+                            <span class="chat-img1 pull-left">
+                                <img src="{{message.message.sent_from_master_user.profile_pic}}" alt="User Avatar" class="img-circle">
+                            </span>
+                            <div class="chat-body1 clearfix">
+                                <p>{{message.message.message_text}}</p>
+                                <div class="chat_time pull-right">
+                                    {{getTime(message.message.created)}}
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="message.message.sent_from_master_user.id == currentUser.id" class="chat_area_li left clearfix admin_chat">
+                            <span class="chat-img1 pull-right">
+                                <img src="{{currentUser.profile_pic}}" alt="{{currentUser.first_name}}" class="img-circle">
+                            </span>
+                            <div class="chat-body1 clearfix">
+                                <p>{{message.message.message_text}}</p>
+                                <div class="chat_time pull-left">
+                                    {{getTime(message.message.created)}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!--chat_area-->
+            <div class="message_write">
+                <textarea #messageText class="form-control" placeholder="type a message"></textarea>
+                <div class="clearfix"></div>
+                <div class="chat_bottom">
+                    <a href="#" class="pull-left upload_btn">
+                        <i class="fa fa-cloud-upload" aria-hidden="true"></i> Add Files
+                    </a>
+                    <a (click)="threadReply(messageText.value)" class="pull-right btn btn-success">Send</a>
+                    <img *ngIf="sending" class="pull-right" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+            </div>
+        </div>
+    </div> <!--message_section-->
+</div>

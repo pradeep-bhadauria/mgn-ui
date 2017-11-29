@@ -1,0 +1,11 @@
+material-datepicker{
+    padding: 0px;
+}
+material-datepicker * {
+    width: 100% !important;
+    border: 0px !important;
+}
+
+.datepicker__calendar[_ngcontent-kqm-0] {
+    height: 16em !important;
+}
